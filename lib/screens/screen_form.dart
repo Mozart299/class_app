@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 
 class ScreenForm extends StatefulWidget {
   const ScreenForm({super.key});
@@ -11,11 +12,11 @@ class ScreenForm extends StatefulWidget {
 }
 
 class _ScreenFormState extends State<ScreenForm> {
-  int age = 10;
+  //int age = 10;
 
   final _formKey = GlobalKey<FormBuilderState>();
 
-  my_age_increase() {
+  /*my_age_increase() {
     age++;
     setState(() {});
   }
@@ -23,7 +24,12 @@ class _ScreenFormState extends State<ScreenForm> {
   my_age_decrease() {
     age--;
     setState(() {});
-  }
+  }*/
+
+  bool _genderHasError = false;
+
+  var genderOptions = ['Male', 'Female'];
+  void _onChanged(dynamic val) => debugPrint(val.toString());
 
   @override
   Widget build(BuildContext context) {
@@ -93,11 +99,34 @@ class _ScreenFormState extends State<ScreenForm> {
                     FormBuilderCheckbox(
                       name: name, 
                       title: title
-                    ),
-                    FormBuilderDropdown(
-                      name: name,
-                      items: items
                     ),*/
+                    FormBuilderDropdown<String>(
+                      name: 'gender',
+                      decoration: InputDecoration(
+                          labelText: 'Gender',
+                          suffix: _genderHasError
+                              ? const Icon(Icons.error)
+                              : const Icon(Icons.check),
+                          hintText: 'Select Gender'),
+                      validator: FormBuilderValidators.compose(
+                          [FormBuilderValidators.required()]),
+                      items: genderOptions
+                          .map((gender) => DropdownMenuItem(
+                                alignment: AlignmentDirectional.center,
+                                value: gender,
+                                child: Text(gender),
+                              ))
+                          .toList(),
+                      onChanged: (val) {
+                        setState(() {
+                          _genderHasError = !(_formKey
+                                  .currentState?.fields['gender']
+                                  ?.validate() ??
+                              false);
+                        });
+                      },
+                      valueTransformer: (val) => val?.toString(),
+                    ),
                   ],
                 ))
 
