@@ -2,6 +2,8 @@
 
 import 'package:class_app/screens/screen_column.dart';
 import 'package:class_app/screens/screen_container.dart';
+import 'package:class_app/screens/screen_images.dart';
+import 'package:class_app/screens/screen_list.dart';
 import 'package:class_app/screens/screen_padding.dart';
 import 'package:class_app/screens/screen_row.dart';
 import 'package:class_app/screens/text_screen.dart';
@@ -38,16 +40,20 @@ class MyApp extends StatelessWidget {
             ),
             ListTile(
               onTap: (() => {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenContainer()))
-              }),
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ScreenContainer()))
+                  }),
               leading: Icon(Icons.star),
               subtitle: Text("Introduction to flutter container"),
               title: Text("Container"),
             ),
             ListTile(
               onTap: (() => {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenRow()))
-              }),
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => ScreenRow()))
+                  }),
               title: Text("Row"),
               leading: Icon(Icons.title),
               subtitle: Text("Implementing row widget"),
@@ -66,6 +72,21 @@ class MyApp extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => ScreenColumn()))
               },
             ),
+            ListTile(
+              title: Text("List view"),
+              onTap: () => {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ScreenList()))
+              },
+            ),
+            ListTile(
+              title: Text("Images Screen"),
+              onTap: () => {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ScreenImages()))
+              },
+            ),
+
           ],
         ),
       ),
