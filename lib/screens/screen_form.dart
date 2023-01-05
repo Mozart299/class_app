@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_brace_in_string_interps, non_constant_identifier_names, avoid_print
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_brace_in_string_interps, non_constant_identifier_names, avoid_print, prefer_final_fields
 
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -25,7 +25,7 @@ class _ScreenFormState extends State<ScreenForm> {
     age--;
     setState(() {});
   }*/
-
+  bool _ageHasError = false;
   bool _genderHasError = false;
 
   var genderOptions = ['Male', 'Female'];
@@ -78,8 +78,19 @@ class _ScreenFormState extends State<ScreenForm> {
                           ),
                     ),
                     FormBuilderTextField(
-                      name: 'last_name',
-                      decoration: InputDecoration(labelText: "Last Name"),
+                      autovalidateMode: AutovalidateMode.always,
+                      name: 'age',
+                      decoration: InputDecoration(
+                        labelText: 'Age',
+                        suffixIcon: _ageHasError
+                          ? const Icon(Icons.error, color: Colors.red,)
+                          : const Icon(Icons.check, color: Colors.green)
+                      ),
+                      onChanged: (val) {
+                        setState(() {
+                          _ageHasError = !(_formKey.currentState?.fields['age'] ?.validate() ?? false);
+                        });
+                      },
                     ),
                     FormBuilderDateTimePicker(
                       name: 'DOB',
@@ -90,16 +101,44 @@ class _ScreenFormState extends State<ScreenForm> {
                           label: Text('Date of Birth'),
                           icon: Icon(Icons.date_range)),
                     ),
-                    /*FormBuilderSlider(
-                      name: name,
-                      initialValue: initialValue,
-                      min: min,
-                      max: max
+                    FormBuilderSlider(
+                      name: 'slider',
+                      validator: FormBuilderValidators.compose([FormBuilderValidators.min(6)]),
+                      onChanged: _onChanged,
+                      initialValue: 7.0,
+                      min: 0.0,
+                      max: 10.0,
+                      divisions: 20,
+                      activeColor: Colors.red,
+                      inactiveColor: Colors.pink[100],
+                      decoration: const InputDecoration(
+                        labelText: 'Number of things',
+                      ),
                     ),
                     FormBuilderCheckbox(
-                      name: name, 
-                      title: title
-                    ),*/
+                        name: 'accept_terms',
+                        initialValue: false,
+                        onChanged: _onChanged,
+                        title: RichText(
+                          text: const TextSpan(children: [
+                            TextSpan(
+                              text: 'I have read and agree to the ',
+                              style: TextStyle(
+                                color: Colors.black,
+                              ),
+                            ),
+                            TextSpan(
+                              text: 'Terms and Conditions',
+                              style: TextStyle(color: Colors.blue),
+                             ),
+                           ],
+                         ),
+                        ),
+                        validator: FormBuilderValidators.equal(
+                          true,
+                          errorText: 'You must accept terms and conditions to continue',
+                        ),
+                      ),
                     FormBuilderDropdown<String>(
                       name: 'gender',
                       decoration: InputDecoration(
